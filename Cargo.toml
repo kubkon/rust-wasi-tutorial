@@ -5,3 +5,7 @@ authors = ["Jakub Konka <jakub.konka@golem.network>"]
 edition = "2018"
 
 [dependencies]
+
+[[bin]]
+path = "src/main.rs"
+name = "main"
