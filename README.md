@@ -9,12 +9,12 @@ your Rust versioning worries.
 
 Next, install the required target
 ```
-$ rustup target add wasm32-unknown-wasi
+$ rustup target add wasm32-unknown-wasi --toolchain nightly
 ```
 
 Afterwards, you should be able to cross-compile to WASI by simply running
 ```
-$ cargo build --target=wasm32-unknown-wasi
+$ cargo +nightly build --target=wasm32-unknown-wasi
 ```
 
 ## Running
