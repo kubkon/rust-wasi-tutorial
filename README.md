@@ -9,12 +9,12 @@ your Rust versioning worries.
 
 Next, install the required target
 ```
-$ rustup target add wasm32-unknown-wasi --toolchain nightly
+$ rustup target add wasm32-wasi --toolchain nightly
 ```
 
 Afterwards, you should be able to cross-compile to WASI by simply running
 ```
-$ cargo +nightly build --target=wasm32-unknown-wasi
+$ cargo +nightly build --target=wasm32-wasi
 ```
 
 ## Running
@@ -28,7 +28,7 @@ echo 'WASI is a lot of fun!' > in.txt
 
 Run it using `wasmtime`
 ```
-$ wasmtime --dir=. target/wasm32-unknown-wasi/debug/main.wasm in.txt out.txt
+$ wasmtime --dir=. target/wasm32-wasi/debug/main.wasm in.txt out.txt
 ```
 
 As a result, you should have `out.txt` file created with the same contents as `in.txt` :-)
@@ -37,7 +37,7 @@ As a result, you should have `out.txt` file created with the same contents as `i
 For the curious ones, here's a simple way to trace back the syscalls used by our WASI program
 in `wasmtime`
 ```
-env RUST_LOG=wasmtime_wasi=trace wasmtime -d --dir=. target/wasm32-unknown-wasi/debug/main.wasm in.txt out.txt
+env RUST_LOG=wasmtime_wasi=trace wasmtime -d --dir=. target/wasm32-wasi/debug/main.wasm in.txt out.txt
 ```
 
 As a result, you should get output similar to the following
