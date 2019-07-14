@@ -3,18 +3,18 @@ Just some simple program with very basic I/O serving as a Rust version of
 the excellent [WASI tutorial](https://github.com/CraneStation/wasmtime/blob/master/docs/WASI-tutorial.md).
 
 ## Building
-Firstly, make sure you are running the latest version of Rust `nightly`.
+Firstly, make sure you are running the latest version of Rust `stable`, `v1.36.0`.
 If not, go ahead and install it. BTW, I strongly recommend `rustup` for all
 your Rust versioning worries.
 
 Next, install the required target
 ```
-$ rustup target add wasm32-wasi --toolchain nightly
+$ rustup target add wasm32-wasi
 ```
 
 Afterwards, you should be able to cross-compile to WASI by simply running
 ```
-$ cargo +nightly build --target=wasm32-wasi
+$ cargo build --target=wasm32-wasi
 ```
 
 ## Running
