@@ -37,58 +37,58 @@ As a result, you should have `out.txt` file created with the same contents as `i
 For the curious ones, here's a simple way to trace back the syscalls used by our WASI program
 in `wasmtime`
 ```
-env RUST_LOG=wasmtime_wasi=trace wasmtime -d --dir=. target/wasm32-wasi/debug/main.wasm in.txt out.txt
+RUST_LOG=wasi_common=trace wasmtime -d --dir=. target/wasm32-wasi/debug/main.wasm -- in.txt out.txt
 ```
 
 As a result, you should get output similar to the following
 ```
- TRACE wasmtime_wasi::syscalls > fd_prestat_get(fd=3, buf=0xffff0)
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_prestat_dir_name(fd=3, path=0x110088, path_len=1)
- TRACE wasmtime_wasi::syscalls >      | (path,path_len)=Ok("\u{0}")
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_fdstat_get(fd=3, buf=0xfffd8)
- TRACE wasmtime_wasi::syscalls >      | *buf=__wasi_fdstat_t { fs_filetype: 3, fs_flags: 0, fs_rights_base: 264240792, fs_rights_inheriting: 268435455 }
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_prestat_get(fd=4, buf=0xffff0)
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_EBADF
- TRACE wasmtime_wasi::syscalls > environ_sizes_get(environ_count=0xffff0, environ_buf_size=0xffffc)
- TRACE wasmtime_wasi::syscalls >      | *environ_count=0
- TRACE wasmtime_wasi::syscalls >      | *environ_buf_size=0
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > args_sizes_get(argc=0xffffc, argv_buf_size=0xffff0)
- TRACE wasmtime_wasi::syscalls >      | *argc=3
- TRACE wasmtime_wasi::syscalls >      | *argv_buf_size=25
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > args_get(argv=0x110088, argv_buf=0x1100a8)
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > args_sizes_get(argc=0xffed8, argv_buf_size=0xffedc)
- TRACE wasmtime_wasi::syscalls >      | *argc=3
- TRACE wasmtime_wasi::syscalls >      | *argv_buf_size=25
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > args_get(argv=0x110120, argv_buf=0x110130)
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > path_open(dirfd=3, dirflags=1, path=0x1101d0, path_len=6, oflags=0x0, fs_rights_base=0xf87febe, fs_rights_inheriting=0xf87febe, fs_flags=0x0, fd=0xffe4c)
- TRACE wasmtime_wasi::syscalls >      | (path,path_len)=Ok("in.txt")
- TRACE wasmtime_wasi::syscalls >      | *fd=5
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_read(fd=5, iovs=0xffe18, iovs_len=1, nread=0xffe0c)
- TRACE wasmtime_wasi::syscalls >      | *nread=15
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_read(fd=5, iovs=0xffe18, iovs_len=1, nread=0xffe0c)
- TRACE wasmtime_wasi::syscalls >      | *nread=0
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > path_open(dirfd=3, dirflags=1, path=0x1101f8, path_len=7, oflags=0x9, fs_rights_base=0xfc7bffd, fs_rights_inheriting=0xfc7bffd, fs_flags=0x0, fd=0xffe4c)
- TRACE wasmtime_wasi::syscalls >      | (path,path_len)=Ok("out.txt")
- TRACE wasmtime_wasi::syscalls >      | *fd=12
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_write(fd=12, iovs=0xffe78, iovs_len=1, nwritten=0xffe6c)
- TRACE wasmtime_wasi::syscalls >      | *nwritten=15
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_close(fd=12)
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
- TRACE wasmtime_wasi::syscalls > fd_close(fd=5)
- TRACE wasmtime_wasi::syscalls >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs > fd_prestat_get(fd=3, prestat_ptr=0xffff0)
+ TRACE wasi_common::hostcalls     >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs > fd_prestat_dir_name(fd=3, path_ptr=0x110088, path_len=1)
+ TRACE wasi_common::hostcalls::fs >      | (path_ptr,path_len)="."
+ TRACE wasi_common::hostcalls     >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs > fd_fdstat_get(fd=3, fdstat_ptr=0xfffd8)
+ TRACE wasi_common::hostcalls::fs >      | *buf=__wasi_fdstat_t { fs_filetype: 3, fs_flags: 0, fs_rights_base: 264240792, fs_rights_inheriting: 268435455 }
+ TRACE wasi_common::hostcalls     >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs > fd_prestat_get(fd=4, prestat_ptr=0xffff0)
+ TRACE wasi_common::hostcalls     >     -> errno=__WASI_EBADF
+ TRACE wasi_common::hostcalls::misc > environ_sizes_get(environ_count_ptr=0xffff0, environ_size_ptr=0xffffc)
+ TRACE wasi_common::hostcalls::misc >      | *environ_count_ptr=0
+ TRACE wasi_common::hostcalls::misc >      | *environ_size_ptr=0
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::misc > args_sizes_get(argc_ptr=0xffffc, argv_buf_size_ptr=0xffff0)
+ TRACE wasi_common::hostcalls::misc >      | *argc_ptr=3
+ TRACE wasi_common::hostcalls::misc >      | *argv_buf_size_ptr=17
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::misc > args_get(argv_ptr=0x110088, argv_buf=0x1100a8)
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::misc > args_sizes_get(argc_ptr=0xffed8, argv_buf_size_ptr=0xffedc)
+ TRACE wasi_common::hostcalls::misc >      | *argc_ptr=3
+ TRACE wasi_common::hostcalls::misc >      | *argv_buf_size_ptr=17
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::misc > args_get(argv_ptr=0x110118, argv_buf=0x110128)
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > path_open(dirfd=3, dirflags=1, path_ptr=0x110198, path_len=2, oflags=0x0, fs_rights_base=0xf87febe, fs_rights_inheriting=0xf87febe, fs_flags=0x0, fd_out_ptr=0xffcbc)
+ TRACE wasi_common::hostcalls::fs   >      | (path_ptr,path_len)="in"
+ TRACE wasi_common::hostcalls::fs   >      | *fd=4
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > fd_read(fd=4, iovs_ptr=0xffc88, iovs_len=1, nread=0xffc7c)
+ TRACE wasi_common::hostcalls::fs   >      | *nread=12
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > fd_read(fd=4, iovs_ptr=0xffc88, iovs_len=1, nread=0xffc7c)
+ TRACE wasi_common::hostcalls::fs   >      | *nread=0
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > path_open(dirfd=3, dirflags=1, path_ptr=0x1101c0, path_len=3, oflags=0x9, fs_rights_base=0xfc7bffd, fs_rights_inheriting=0xfc7bffd, fs_flags=0x0, fd_out_ptr=0xffcbc)
+ TRACE wasi_common::hostcalls::fs   >      | (path_ptr,path_len)="out"
+ TRACE wasi_common::hostcalls::fs   >      | *fd=4
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > fd_write(fd=4, iovs_ptr=0xffce8, iovs_len=1, nwritten=0xffcdc)
+ TRACE wasi_common::hostcalls::fs   >      | *nwritten=12
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > fd_close(fd=4)
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_ESUCCESS
+ TRACE wasi_common::hostcalls::fs   > fd_close(fd=4)
+ TRACE wasi_common::hostcalls       >     -> errno=__WASI_EBADF
 ```
 
 Pretty neat, isn't it? ;-)
